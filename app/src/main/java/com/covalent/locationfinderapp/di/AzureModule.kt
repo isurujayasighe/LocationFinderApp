@@ -1,44 +1,78 @@
 package com.covalent.locationfinderapp.di
 
-import com.azure.cosmos.implementation.AsyncDocumentClient
+import android.app.Application
+import android.content.Context
+import com.azure.core.credential.TokenCredential
+import com.azure.cosmos.CosmosAsyncClient
+import com.azure.cosmos.CosmosClient
+import com.azure.cosmos.CosmosClientBuilder
 import com.azure.cosmos.implementation.ConnectionPolicy
 import com.azure.cosmos.implementation.ConnectionPolicy.getDefaultPolicy
-import com.covalent.locationfinderapp.data.repository.AzureCosmosClientImpl
-import com.covalent.locationfinderapp.data.repository.LocationServiceClientImpl
-import com.covalent.locationfinderapp.domain.repository.AzureCosmosClient
-import com.covalent.locationfinderapp.domain.repository.LocationServiceClient
+import com.azure.messaging.servicebus.ServiceBusClientBuilder
+import com.azure.messaging.servicebus.ServiceBusReceiverClient
+import com.azure.messaging.servicebus.ServiceBusSenderAsyncClient
+import com.azure.messaging.servicebus.ServiceBusSenderClient
+import com.covalent.locationfinderapp.data.repository.AzureClientImpl
+import com.covalent.locationfinderapp.domain.repository.AzureClient
+import com.microsoft.signalr.HubConnection
+import com.microsoft.signalr.HubConnectionBuilder
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.reactivex.rxjava3.core.Single
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AzureModule {
 
-    private const val ENDPOINT_URI = "https://cosmosrgeastus31d5f34f-51c5-42ab-9e46db.documents.azure.com:443/"
-    private const val PRIMARY_KEY = "userId"
-    private const val DATABASE_ID = "your_database_id"
-    private const val COLLECTION_ID = "your_collection_id"
+    private const val ENDPOINT_URI =
+        "https://covalent-cosmosdb.documents.azure.com:443/"
+    private const val PRIMARY_KEY =
+        "ukeHaS50Q5vTl7Wo7TuKH5ZvlBXRZJjqN3FZ3dgdfje0CPotQ20fiUD7VTlxstxo98arJY07XRSUACDbAKPkDA=="
+    private const val DATABASE_ID = "Drivers"
+    private const val COLLECTION_ID = "UzQsAMrQbC4BAAAAAAAAAA=="
 
     @Singleton
     @Provides
-    fun provideConnectionPolicy():ConnectionPolicy{
+    fun provideConnectionPolicy(): ConnectionPolicy {
         return getDefaultPolicy()
     }
 
     @Singleton
     @Provides
-    fun provideAzureCosmosClient():AsyncDocumentClient{
-        val connectionPolicy = getDefaultPolicy()
-        return AsyncDocumentClient.Builder()
-            .withServiceEndpoint(ENDPOINT_URI)
-            .withMasterKeyOrResourceToken(PRIMARY_KEY)
-            .withConnectionPolicy(connectionPolicy)
+    fun provideCosmosAsyncClient(application: Application): CosmosAsyncClient =
+        CosmosClientBuilder()
+            .endpoint(ENDPOINT_URI)
+            .key(PRIMARY_KEY)
+            .buildAsyncClient()
+
+    @Singleton
+    @Provides
+    fun provideCosmosClient(application: Application): CosmosClient = CosmosClientBuilder()
+        .endpoint(ENDPOINT_URI)
+        .key(PRIMARY_KEY)
+        .buildClient()
+
+    @Singleton
+    @Provides
+    fun provideSignalrRClient(): HubConnection =
+        HubConnectionBuilder.create("https://covalent-hub.service.signalr.net/client/?hub=serverless")
             .build()
-    }
+
+
+    @Singleton
+    @Provides
+    fun provideServiceBusSenderClient(@ApplicationContext context: Context): ServiceBusSenderClient =
+        ServiceBusClientBuilder()
+            .connectionString("Endpoint=sb://mi-servicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=w719+81prXRcTOvYPFgw35U52l5jBLw1s+ASbNROBUI=")
+            .sender()
+            .queueName("location")
+            .buildClient()
+
 }
 
 @InstallIn(SingletonComponent::class)
@@ -46,6 +80,6 @@ object AzureModule {
 interface CosmosBind {
 
     @Binds
-    fun cosmosBind(azureCosmosClientImpl: AzureCosmosClientImpl): AzureCosmosClient
+    fun cosmosBind(azureClientImpl: AzureClientImpl): AzureClient
 }
 

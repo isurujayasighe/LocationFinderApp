@@ -55,6 +55,7 @@ android {
         resources.excludes.add("META-INF/io.netty.versions.properties")
         resources.excludes.add("META-INF/NOTICE.md")
         resources.excludes.add("META-INF/LICENSE.md")
+        resources.excludes.add("META-INF/DEPENDENCIES")
 
 
     }
@@ -74,7 +75,6 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.constraintlayout)
     implementation(libs.play.services.location)
-
     kapt(libs.dagger.hilt.compiler)
 
 //    logging
@@ -96,6 +96,19 @@ dependencies {
 
     implementation(libs.azure.cosmos.db)
 
+    implementation(libs.system.ui.controller)
+
+    implementation(libs.what3words.compose)
+
+    implementation(libs.azure.signalR)
+
+    implementation(libs.rx.java)
+
+    implementation(libs.azure.service.bus)
+
+    implementation ("com.microsoft.azure:adal4j:1.6.5")
+
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*jar"))))
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

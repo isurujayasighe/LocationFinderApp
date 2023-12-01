@@ -34,7 +34,12 @@ startupVersion       = "1.1.1"
 mobileFrameworkVersion = "1.0.3"
 playServiceVersion = "20.0.0"
 accompenistVersion = "0.32.0"
-azureCosmosDbVersion = "4.5.0"
+azureCosmosDbVersion = "4.23.0"
+systemUiController = "0.32.0"
+what3wordsVersion = "3.2.0"
+signalRVersion = "7.0.0"
+rxJavaVersion = "3.1.8"
+serviceBusVersion = "7.15.0-beta.5"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -95,6 +100,12 @@ play-service-location = {module = "com.google.android.gms:play-services-location
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.0.1" }
 accompanist-permissions = {module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions"}
 azure-cosmos-db = {module = "com.azure:azure-cosmos", version.ref = "azureCosmosDbVersion"}
+system-ui-controller = {module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "systemUiController"}
+
+what3words-compose = {module = "com.what3words:w3w-android-components",version.ref = "what3wordsVersion"}
+azure-signalR = {module = "com.microsoft.signalr:signalr",version.ref = "signalRVersion"}
+rx-java = {module = "io.reactivex.rxjava3:rxjava", version.ref = "rxJavaVersion"}
+azure-service-bus = {module = "com.azure:azure-messaging-servicebus", version.ref = "serviceBusVersion"}
 
 [bundles]
 android-lyfcycle = ["androidx-lifecycle-runtime-compose"]

@@ -8,4 +8,9 @@ interface LocationServiceClient {
     fun getLocationUpdates(intervals: Long): Flow<Location>
 
     class LocationException(message: String) : Exception()
+
+    fun getCurrentLocation():Flow<Location>
+
+    fun removeLocationUpdate():Flow<Boolean>
+
 }
