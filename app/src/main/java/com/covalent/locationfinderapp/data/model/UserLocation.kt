@@ -13,13 +13,15 @@ data class UserLocation(
     @SerializedName("end")
     val end: End,
     @SerializedName("id")
-    val id: String, // journey-001
+    var id: String, // journey-001
     @SerializedName("journeyId")
     val journeyId: String, // journey-001
     @SerializedName("lastModified")
     val lastModified: String, // 0001-01-01T00:00:00
     @SerializedName("start")
     val start: Start,
-    @SerializedName("status")
-    val status: Boolean // true
+     @SerializedName("status")
+    val status: String, //true
+    @SerializedName("type")
+    val type: String //
 )

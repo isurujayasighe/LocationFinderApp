@@ -36,6 +36,9 @@ object AzureModule {
     private const val DATABASE_ID = "Drivers"
     private const val COLLECTION_ID = "UzQsAMrQbC4BAAAAAAAAAA=="
 
+    private const val SERVICE_BUS_URL_MI = "Endpoint=sb://mi-servicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=w719+81prXRcTOvYPFgw35U52l5jBLw1s+ASbNROBUI="
+    private const val SERVICE_BUS_URL_COVALENT = "Endpoint=sb://covalent.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=ENaG5EHEUpLA5hqcusdTzDZeZUYHa+z9a+ASbAh96M4="
+    private const val QUEUE_NAME_COVALENT = "google-map-pod"
     @Singleton
     @Provides
     fun provideConnectionPolicy(): ConnectionPolicy {
@@ -68,9 +71,9 @@ object AzureModule {
     @Provides
     fun provideServiceBusSenderClient(@ApplicationContext context: Context): ServiceBusSenderClient =
         ServiceBusClientBuilder()
-            .connectionString("Endpoint=sb://mi-servicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=w719+81prXRcTOvYPFgw35U52l5jBLw1s+ASbNROBUI=")
+            .connectionString(SERVICE_BUS_URL_COVALENT)
             .sender()
-            .queueName("location")
+            .queueName(QUEUE_NAME_COVALENT)
             .buildClient()
 
 }

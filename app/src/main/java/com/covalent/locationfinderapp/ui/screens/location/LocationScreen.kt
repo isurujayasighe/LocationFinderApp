@@ -147,7 +147,7 @@ fun LocationScreen(viewModel: LocationViewModel = hiltViewModel()) {
                     onClick = {
                         uiState.let {
 //                            viewModel.getWhat3WordsString(uiState.lat.toDouble(),uiState.long.toDouble())
-                            viewModel.sendDataToServiceBus()
+//                            viewModel.sendDataToServiceBus(uiState.lat.toDouble(),uiState.long.toDouble())
                         }
                 }) {
                     Text(text = "What3Word")

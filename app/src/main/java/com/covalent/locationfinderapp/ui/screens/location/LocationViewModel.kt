@@ -34,32 +34,14 @@ class LocationViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LocationState())
     val uiState: MutableStateFlow<LocationState> = _uiState
 
+    private var number: Int = 300
+
+    private var id: String = "00$number"
+
     init {
         Log.d("LO_", "LocationViewModel Injected")
-//        sendData()
     }
-
-    private fun sendData(){
-         val DATABASE_ID = "Drivers"
-         val COLLECTION_ID = "UzQsAMrQbC4BAAAAAAAAAA=="
-
-        try {
-            val document = Document("Hello Isuru")
-
-            val databaseLink = "dbs/$DATABASE_ID"
-            val collectionLink = "$databaseLink/colls/$COLLECTION_ID"
-
-//            azureDocumentClient.createDocument(collectionLink,document,null,false)
-
-        }catch (e: Exception){
-            Log.d("AZURE_",e.toString())
-        }
-    }
-
     fun getDataFromCosmos(){
-//        viewModelScope.launch(Dispatchers.IO){
-//            azureCosmoClient.sendData("")
-//        }
         viewModelScope.launch(Dispatchers.IO){
            try {
                azureClient.sendMessageToSignalR("")
@@ -69,19 +51,21 @@ class LocationViewModel @Inject constructor(
         }
     }
 
-    fun sendDataToServiceBus(){
+    fun sendDataToServiceBus(lat:Double, long:Double){
+        number++
         try {
             azureClient.sendDataToServiceBus(UserLocation(
                 created = Calendar.getInstance().timeInMillis.toString(),
-                current = Current(69.12254454,70.2554412),
-                driverId = "driver-001",
+                current = Current(lat,long),
+                driverId = "driver-007",
                 end = End(69.12254454,70.2554412),
                 id = "",
-                journeyId = "",
+                journeyId = "journey-007",
                 lastModified = Calendar.getInstance().timeInMillis.toString(),
-                start = Start(69.12254454,70.2554412),
-                status = false
-            ))
+                start = Start(lat,long),
+                status = "true",
+                type = "created")
+            )
         }catch (e:Exception){
             Log.d("CO_ERROR",e.message!!)
         }
@@ -90,7 +74,7 @@ class LocationViewModel @Inject constructor(
 
     fun getLocationUpdates() {
         viewModelScope.launch {
-            locationServiceClient.getLocationUpdates(20000L)
+            locationServiceClient.getLocationUpdates(1000L)
                 .catch {
                     Log.d("CO_",it.message!!)
                 }
@@ -102,7 +86,7 @@ class LocationViewModel @Inject constructor(
                         isSuccess = true
                     )
 
-                    sendDataToServiceBus()
+                    sendDataToServiceBus(it.latitude,it.longitude)
                 }
         }
     }
